@@ -16,6 +16,7 @@ namespace Game.Runtime.Scripts.Enemies
         private float _progress;
         private Transform _target;
         private Collider2D[] _colliders;
+        private Rigidbody2D _rb;
 
         [Inject]
         public void Construct(EnemiesConfig enemiesConfig)
@@ -24,6 +25,7 @@ namespace Game.Runtime.Scripts.Enemies
             Animator animator = GetComponent<Animator>();
             _colliders = GetComponentsInChildren<Collider2D>();
             EnemyDeathBox enemyDeathBox = GetComponentInChildren<EnemyDeathBox>();
+            _rb = GetComponent<Rigidbody2D>();
 
             _slimeStateMachine = new SlimeStateMachine(this, animator, enemiesConfig, enemyDeathBox);
 
@@ -52,11 +54,33 @@ namespace Game.Runtime.Scripts.Enemies
             }
         }
 
+        public void SetPosition(Transform position)
+        {
+            _rb.isKinematic = true;
+            transform.position = position.position;
+            _rb.isKinematic = false;
+        }
+        
+        public void SetPosition(Vector3 position)
+        {
+            _rb.isKinematic = true;
+            transform.position = position;
+            _rb.isKinematic = false;
+        }
+
         public override void Die()
         {
             foreach (var col in _colliders)
             {
                 col.enabled = false;
+            }
+        }
+
+        public void Reset()
+        {
+            foreach (Collider2D _collider in _colliders)
+            {
+                _collider.enabled = true;
             }
         }
     }

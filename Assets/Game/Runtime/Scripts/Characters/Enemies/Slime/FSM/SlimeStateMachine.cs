@@ -12,10 +12,13 @@ public class SlimeStateMachine : GenericFSM
         EnemiesConfig enemiesConfig,
         EnemyDeathBox enemyDeathBox)
     {
-        _states.Add(typeof(EnemyActiveState).ToString(),
+        _states.Add(typeof(SlimeWalkState).ToString(),
             new SlimeWalkState(slime, animator, enemiesConfig, enemyDeathBox));
 
         _states.Add(typeof(EnemyDeathState).ToString(),
             new SlimeDeathState(animator, slime));
+        
+        _states.Add(typeof(EnemyActiveState).ToString(),
+            new SlimeInitializeState(slime, slime.transform.position));
     }
 }

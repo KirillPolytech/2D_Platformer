@@ -36,10 +36,7 @@ namespace Game.Runtime.Scripts.Contexts
         private Enemy[] enemies;
         
         [SerializeField]
-        private PatrolPath[] patrolPaths;
-
-        [SerializeField]
-        private Transform[] paths;
+        private PathData[] PathsData;
         
         [SerializeField]
         private ParticleSystem explosionParticle;
@@ -53,9 +50,7 @@ namespace Game.Runtime.Scripts.Contexts
             Container.Bind<Enemy[]>().FromInstance(enemies).AsSingle();
             Container.Bind<EnemiesProvider>().AsSingle();
             
-            Container.BindInstance(new PathsProvider(paths)).AsSingle();
-            
-            Container.Bind<PatrolPath[]>().FromInstance(patrolPaths).AsSingle();
+            Container.Bind<PathData[]>().FromInstance(PathsData).AsSingle();
             
             Container.BindInstance(rayCaster).AsSingle();
 

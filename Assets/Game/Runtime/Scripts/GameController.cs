@@ -7,7 +7,6 @@ using Game.Runtime.Scripts.MVP;
 using Game.Runtime.Scripts.Providers;
 using Platformer.Mechanics;
 using UnityEngine;
-using UnityEngine.Windows;
 using Zenject;
 using Input = UnityEngine.Input;
 
@@ -19,9 +18,8 @@ namespace Game.Runtime.Scripts
         private PlayerModel _playerModel;
         private GameStateMachine _gameStateMachine;
         private GameConfig _gameConfig;
-        private PathsProvider _pathsProvider;
+        private PathData[] _paths;
         private EnemiesProvider _enemiesProvider;
-        private PatrolPath[] _patrolPaths;
 
         [Inject]
         public void Construct(
@@ -29,15 +27,13 @@ namespace Game.Runtime.Scripts
             PlayerModel playerModel,
             GameStateMachine gameStateMachine,
             GameConfig gameConfig,
-            PathsProvider pathsProvider,
-            PatrolPath[] patrolPaths)
+            PathData[] paths)
         {
             _eventBus = eventBus;
             _playerModel = playerModel;
             _gameStateMachine = gameStateMachine;
             _gameConfig = gameConfig;
-            _pathsProvider = pathsProvider;
-            _patrolPaths = patrolPaths;
+            _paths = paths;
         }
 
         public void Initialize()
@@ -47,13 +43,9 @@ namespace Game.Runtime.Scripts
 
             _playerModel.Lives.OnChanged += CheckDeath;
 
-            if (_pathsProvider.Paths.Length / 2 != _patrolPaths.Length)
-                throw new Exception();
-
-            int ind = 0;
-            foreach (var patrolPath in _patrolPaths)
+            foreach (var pathData in _paths)
             {
-                patrolPath.Initialize(new[] {_pathsProvider.Paths[ind++], _pathsProvider.Paths[ind++]});
+                pathData.PatrolPath.Initialize(pathData.Paths);
             }
 
             _gameStateMachine.Enter<PlayState>();
