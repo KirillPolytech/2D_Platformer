@@ -1,5 +1,4 @@
 ﻿using Game.Runtime.Scripts.Generic_FSM;
-using Game.Runtime.Scripts.Player.PlayerFSM;
 using UnityEngine;
 
 namespace Game.Runtime.Scripts.Enemies.FSM

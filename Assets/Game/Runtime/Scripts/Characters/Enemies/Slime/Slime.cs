@@ -70,7 +70,7 @@ namespace Game.Runtime.Scripts.Enemies
 
         public override void Die()
         {
-            foreach (var col in _colliders)
+            foreach (Collider2D col in _colliders)
             {
                 col.enabled = false;
             }

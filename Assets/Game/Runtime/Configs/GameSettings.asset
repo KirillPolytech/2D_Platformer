@@ -16,7 +16,7 @@ MonoBehaviour:
   MaxSpeed: 5
   JumpForce: 5
   JumpTicks: 5
-  SpawnDelay: 2
+  SpawnDelay: 2.5
   GroundCheckBox: {x: 0.25, y: 0.07}
   Lives: 15
   InvincibilityTime: 1

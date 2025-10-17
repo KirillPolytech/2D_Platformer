@@ -8,10 +8,10 @@ using Zenject;
 
 namespace Game.Runtime.Scripts.FSM
 {
-    public class GameStateMachine : GenericFSM
+    public class LevelStateMachine : GenericFSM
     {
         [Inject]
-        public GameStateMachine(
+        public LevelStateMachine(
             SignalBus signalBus,
             WindowsController windowsController,
             PlayerModel playerModel,

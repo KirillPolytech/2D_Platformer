@@ -5,7 +5,6 @@ using Game.Runtime.Scripts.EventBusThings;
 using Game.Runtime.Scripts.FSM;
 using Game.Runtime.Scripts.MVP;
 using Game.Runtime.Scripts.Providers;
-using Platformer.Mechanics;
 using UnityEngine;
 using Zenject;
 using Input = UnityEngine.Input;
@@ -16,7 +15,7 @@ namespace Game.Runtime.Scripts
     {
         private SignalBus _eventBus;
         private PlayerModel _playerModel;
-        private GameStateMachine _gameStateMachine;
+        private LevelStateMachine _levelStateMachine;
         private GameConfig _gameConfig;
         private PathData[] _paths;
         private EnemiesProvider _enemiesProvider;
@@ -25,13 +24,13 @@ namespace Game.Runtime.Scripts
         public void Construct(
             SignalBus eventBus,
             PlayerModel playerModel,
-            GameStateMachine gameStateMachine,
+            LevelStateMachine levelStateMachine,
             GameConfig gameConfig,
             PathData[] paths)
         {
             _eventBus = eventBus;
             _playerModel = playerModel;
-            _gameStateMachine = gameStateMachine;
+            _levelStateMachine = levelStateMachine;
             _gameConfig = gameConfig;
             _paths = paths;
         }
@@ -48,7 +47,7 @@ namespace Game.Runtime.Scripts
                 pathData.PatrolPath.Initialize(pathData.Paths);
             }
 
-            _gameStateMachine.Enter<PlayState>();
+            _levelStateMachine.Enter<PlayState>();
         }
 
         public void Dispose()
@@ -82,13 +81,13 @@ namespace Game.Runtime.Scripts
         {
             if (_playerModel.Lives.Value <= 0)
             {
-                _gameStateMachine.Enter<LoseState>();
+                _levelStateMachine.Enter<LoseState>();
             }
         }
 
         private void SetVictory()
         {
-            _gameStateMachine.Enter<WinState>();
+            _levelStateMachine.Enter<WinState>();
         }
     }
 }

@@ -5,7 +5,6 @@ using Game.Runtime.Scripts.FSM;
 using Game.Runtime.Scripts.MVP;
 using Game.Runtime.Scripts.Providers;
 using Game.Runtime.Scripts.Windows;
-using Platformer.Mechanics;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -65,7 +64,7 @@ namespace Game.Runtime.Scripts.Contexts
             BindScore();
             BindLives();
 
-            Container.BindInterfacesAndSelfTo<GameStateMachine>().AsSingle().WithArguments(playerStartPosition);
+            Container.BindInterfacesAndSelfTo<LevelStateMachine>().AsSingle().WithArguments(playerStartPosition);
             Container.BindInterfacesAndSelfTo<GameController>().AsSingle();
         }
 
