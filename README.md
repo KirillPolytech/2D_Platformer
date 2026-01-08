@@ -6,7 +6,7 @@ https://github.com/user-attachments/assets/c7bcd78c-2fd7-475d-a639-9f850ebc913f
 
 Используемые фреймворки: Zenject, DOTween.
 
-Паттерны: Signalbus, MVP, StateMachine.
+Паттерны: Signalbus, MVP, StateMachine, strategy.
 
 В Game->Runtime->Configs->GameSettings можно настроить параметры игры.
 
