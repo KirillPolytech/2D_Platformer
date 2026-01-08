@@ -1,4 +1,5 @@
-﻿using Game.Runtime.Scripts.Config;
+﻿using Game.Runtime.Scripts.Characters.MainCharacter;
+using Game.Runtime.Scripts.Config;
 using Game.Runtime.Scripts.Generic_FSM;
 using Game.Runtime.Scripts.Player.PlayerFSM;
 using UnityEngine;
@@ -16,16 +17,18 @@ namespace Game.Runtime.Scripts.PlayerLogic
             Player player,
             SignalBus signalBus)
         {
+            FsmReferenceStorage refs = new(gameConfig, inputs, rb, animator, player, signalBus, this);
+
             _states.Add(typeof(JumpState).ToString(),
-                new JumpState(inputs, gameConfig, animator, this, player, signalBus));
+                new JumpState(refs));
             _states.Add(typeof(WalkState).ToString(),
-                new WalkState(rb, inputs, gameConfig, animator, this, player));
+                new WalkState(refs));
             _states.Add(typeof(IdleState).ToString(),
-                new IdleState(rb, inputs, gameConfig, animator, this, player));
+                new IdleState(refs));
             _states.Add(typeof(DeathState).ToString(),
-                new DeathState(rb, inputs, gameConfig, animator, this, player));
+                new DeathState(refs));
             _states.Add(typeof(SpawnState).ToString(),
-                new SpawnState(rb, inputs, gameConfig, animator, this, player));
+                new SpawnState(refs));
         }
     }
 }

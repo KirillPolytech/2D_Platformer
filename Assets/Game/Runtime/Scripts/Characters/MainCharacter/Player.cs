@@ -1,4 +1,6 @@
-﻿using Game.Runtime.Scripts.Config;
+﻿using Game.Runtime.Scripts.Characters.MainCharacter;
+using Game.Runtime.Scripts.Characters.MainCharacter.Interfaces;
+using Game.Runtime.Scripts.Config;
 using Game.Runtime.Scripts.Enemies;
 using Game.Runtime.Scripts.EventBusThings;
 using Game.Runtime.Scripts.MVP;
@@ -26,6 +28,10 @@ namespace Game.Runtime.Scripts.PlayerLogic
         private Invincibility _invincibility;
         private PlayerModel _playerModel;
 
+        private IHumanJump _humanJump;
+        private IHumanMovement _humanMovement;
+        private HealthSystem _healthSystem;
+
         [Inject]
         public void Construct(
             InputSystem_Actions inputs,
@@ -46,6 +52,10 @@ namespace Game.Runtime.Scripts.PlayerLogic
             _rb = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _sprite = GetComponent<SpriteRenderer>();
+
+            _humanMovement = new HumanMovement(_rb, _gameConfig, _inputs);
+            _humanJump = new HumanJump(_rb, _gameConfig);
+            _healthSystem = new HealthSystem(_playerModel);
 
             StateMachine = new PlayerFSM(_gameConfig, _inputs, _rb, _animator, this, _signalBus);
         }
@@ -73,16 +83,14 @@ namespace Game.Runtime.Scripts.PlayerLogic
                 _gameConfig.GroundLayer);
         }
 
-        public void Move()
-        {
-            float value = _inputs.Player.Move.ReadValue<Vector2>().x * _gameConfig.Speed;
-
-            _rb.velocity = new Vector3(value, _rb.velocity.y);
-        }
-
         public void Jump()
         {
-            _rb.velocity = new Vector2(_rb.velocity.x, _gameConfig.JumpForce);
+            _humanJump.Jump();
+        }
+
+        public void Move()
+        {
+            _humanMovement.Move();
         }
 
         public void SetPosition(Transform position)
@@ -111,9 +119,9 @@ namespace Game.Runtime.Scripts.PlayerLogic
 
         private void HandleExtraJump(GameObject gameObj)
         {
-            EnemyDeathBox _deathBox = gameObj?.GetComponent<EnemyDeathBox>();
+            IExtraJump _deathBox = gameObj?.GetComponent<EnemyDeathBox>();
 
-            if (!_deathBox)
+            if (_deathBox == null)
                 return;
 
             StateMachine.Enter<JumpState>();
@@ -122,13 +130,13 @@ namespace Game.Runtime.Scripts.PlayerLogic
         private void HandleHealthLoss(GameObject gameObj)
         {
             Enemy enemy = gameObj?.GetComponent<Enemy>();
-            
+
             if (!enemy || _invincibility.IsInvincible)
                 return;
 
             _invincibility.Start(_sprite);
 
-            _playerModel.Lives.Value -= enemy.Damage;
+            _healthSystem.Loss(enemy.Damage);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
