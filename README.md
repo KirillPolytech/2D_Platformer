@@ -4,6 +4,6 @@
 
 Используемые фреймворки: Zenject, DOTween.
 
-Паттерны: EventBus, MVP, StateMachine.
+Паттерны: Signalbus, MVP, StateMachine.
 
 В Game->Runtime->Configs->GameSettings можно настроить параметры игры.
